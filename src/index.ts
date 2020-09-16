@@ -140,12 +140,14 @@ export const get = async (
   tableId: string,
   {
     sort,
+    view,
     fields,
     filter,
     populate,
     toObject,
   }: {
     sort?: Array<SortParameter>;
+    view?: string;
     filter?: string;
     fields?: Array<string>;
     populate?: PopulateType;
@@ -155,6 +157,7 @@ export const get = async (
   const records = await base(tableId)
     .select({
       ...(sort ? { sort } : {}),
+      ...(view ? { view } : {}),
       ...(fields ? { fields } : {}),
       ...(filter ? { filterByFormula: filter } : {}),
     })

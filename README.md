@@ -1,6 +1,5 @@
 [![npm version](https://img.shields.io/npm/v/luft)](https://www.npmjs.com/package/luft)
 
-
 # 💨 luft
 
 An extremely simple Airtable client for JavaScript.
