@@ -6,6 +6,9 @@
     "type": "git",
     "url": "https://github.com/GriffinSauce/luft.git"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
