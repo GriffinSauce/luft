@@ -1,13 +1,19 @@
-// @ts-ignore
-import Record from 'airtable/lib/record';
+import Airtable from 'airtable';
 
 import { isRecord, recordToObject } from './utils';
 
-const tableName = 'TableName';
+const { Table, Record } = Airtable;
+
+const table = new Table(
+  // @ts-ignore
+  null,
+  'tableId123',
+  'TableName123'
+);
 
 describe(`isRecord`, () => {
   it('returns true for record', () => {
-    const record = new Record(tableName, 'id1', {});
+    const record = new Record(table, 'id1', {});
     expect(isRecord(record)).toEqual(true);
   });
 
@@ -29,12 +35,12 @@ describe(`isRecord`, () => {
 
 describe(`recordToObject`, () => {
   it('converts empty record', () => {
-    const emptyRecord = new Record(tableName, 'id1', {});
+    const emptyRecord = new Record(table, 'id1', {});
     expect(recordToObject(emptyRecord)).toEqual({ id: 'id1' });
   });
 
   it('converts record with fields', () => {
-    const record = new Record(tableName, 'id1', {
+    const record = new Record(table, 'id1', {
       fields: {
         testField1: '1',
         testField2: '2',
@@ -48,12 +54,12 @@ describe(`recordToObject`, () => {
   });
 
   it('converts record with populated field containing a record', () => {
-    const childRecord = new Record(tableName, 'child', {
+    const childRecord = new Record(table, 'child', {
       fields: {
         isChild: true,
       },
     });
-    const parentRecord = new Record(tableName, 'parent', {
+    const parentRecord = new Record(table, 'parent', {
       fields: {
         isParent: true,
         child: childRecord,
@@ -70,17 +76,17 @@ describe(`recordToObject`, () => {
   });
 
   it('converts record with populated field containing array of records', () => {
-    const childRecord1 = new Record(tableName, 'child1', {
+    const childRecord1 = new Record(table, 'child1', {
       fields: {
         isChild1: true,
       },
     });
-    const childRecord2 = new Record(tableName, 'child2', {
+    const childRecord2 = new Record(table, 'child2', {
       fields: {
         isChild2: true,
       },
     });
-    const parentRecord = new Record(tableName, 'parent', {
+    const parentRecord = new Record(table, 'parent', {
       fields: {
         isParent: true,
         child: [childRecord1, childRecord2],

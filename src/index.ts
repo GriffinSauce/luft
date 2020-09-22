@@ -1,4 +1,4 @@
-import Airtable, { Base, Record, SortParameter } from 'airtable';
+import Airtable from 'airtable';
 import reduce from 'awaity/reduce';
 import { recordToObject } from './utils';
 
@@ -18,7 +18,7 @@ type PopulateFieldType = {
 
 type PopulateType = Array<PopulateFieldType>;
 
-let base: Base;
+let base: Airtable.Base;
 
 // Go nuts, you got this!
 export const getBase = () => {
@@ -42,7 +42,7 @@ export const initialize = ({
 };
 
 const populateField = async (
-  record: Record<any>,
+  record: AnyRecord,
   { path, from, multi, fields }: PopulateFieldType
 ) => {
   // @ts-ignore - missing in types
@@ -76,9 +76,9 @@ const populateField = async (
 };
 
 const populateRecord = (
-  record: Record<any>,
+  record: AnyRecord,
   populate: PopulateType
-): Record<any> => reduce(populate, populateField, record); // Reduce with promises
+): Promise<AnyRecord> => reduce(populate, populateField, record); // Reduce with promises
 
 export const getById = async (
   tableId: string,
@@ -101,7 +101,7 @@ export const getById = async (
     })
     .firstPage();
 
-  let populated = record;
+  let populated = record as AnyRecord;
   if (populate) populated = await populateRecord(record, populate);
 
   return toObject ? recordToObject(populated) : populated;
@@ -130,7 +130,7 @@ export const getByField = async (
     })
     .firstPage();
 
-  let populated = record;
+  let populated = record as AnyRecord;
   if (populate) populated = await populateRecord(record, populate);
 
   return toObject ? recordToObject(populated) : populated;
@@ -146,7 +146,7 @@ export const get = async (
     populate,
     toObject,
   }: {
-    sort?: Array<SortParameter>;
+    sort?: Array<Airtable.SortParameter>;
     view?: string;
     filter?: string;
     fields?: Array<string>;
@@ -163,7 +163,7 @@ export const get = async (
     })
     .all();
 
-  let populated = records;
+  let populated = (records as unknown[]) as AnyRecord[];
   if (populate) {
     populated = await Promise.all(
       records.map(record => populateRecord(record, populate))

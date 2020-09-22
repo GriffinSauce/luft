@@ -1,14 +1,13 @@
-import { Record } from 'airtable';
 import camelCase from 'lodash.camelcase';
 import isObject from 'lodash.isobject';
 
 type ObjectRecord = { [key: string]: any };
 
 // Quack
-export const isRecord = (maybeRecord: Record<any> | any): boolean =>
+export const isRecord = (maybeRecord: AnyRecord | any): boolean =>
   !!(maybeRecord?.getId && maybeRecord?.fields && isObject(maybeRecord));
 
-export const recordToObject = (record: Record<any>): ObjectRecord => {
+export const recordToObject = (record: AnyRecord): ObjectRecord => {
   // @ts-ignore - is untyped
   const id = record.getId();
   return Object.keys(record.fields || {}).reduce(
